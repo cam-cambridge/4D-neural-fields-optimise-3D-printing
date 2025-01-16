@@ -6,14 +6,13 @@ __email__ =     'cm2161@cam.ac.uk'
 
 import yaml
 import argparse
-from datetime import datetime
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import CSVLogger
 
 # local dependencies
-from src.model.interpol import Interpol
-from src.dataset.data_module import DirDataModule, ThreeDimModule, H5PYModule
+from src.interpol import Interpol
+from src.dataset.data_module import H5PYModule
 
 def to_namespace(d):
     if isinstance(d, dict):
