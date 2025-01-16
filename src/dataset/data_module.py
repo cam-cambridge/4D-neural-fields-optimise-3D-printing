@@ -19,9 +19,7 @@ class DirDataModule(LightningDataModule):
     def setup(self, stage=None):
 
         if stage == "fit" or stage is None:
-
             self.train_dataset = DirDataset(config=self.config)
-
             self.val_dataset = DirDataset(config=self.config)
 
         if stage == "test" or stage is None:

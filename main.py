@@ -26,7 +26,6 @@ with open("config.yaml", "r") as file:
 if __name__ == "__main__":
 
     data = H5PYModule(config=config)
-
     model = Interpol(config=config)
 
     checkpoint_callback = ModelCheckpoint(

@@ -117,18 +117,16 @@ class H5PYDataset(Dataset):
         self.config = config
         self.data_root = config.data.dataroot
         with h5py.File(self.data_root,'r') as dataset:
-            self.dataset= np.array(dataset["dataset"])
+            self.dataset= np.array(dataset["dataset"])[::self.config.data.dim_reduction]
 
-        print(self.dataset.shape[0])
-            
     def __len__(self):
-        return self.dataset.shape[0]
+        size = self.dataset.shape[0]
+        return size
 
     def __getitem__(self, idx):
         sample = self.dataset[idx]
         x = self.domain_normalisation(sample[:4])
         y = sample[4:]
-        # y = np.where(y > 0, 0, 1) 
 
         return torch.tensor(x).float(), torch.tensor(y).float()
 

@@ -7,15 +7,15 @@
 name: interpol # Save name
 
 data:
-  dataroot: "/home/cam/Documents/Christos/interpolation/git_to_publish/data_bolt.h5" # Directory where data is stored
+  dataroot: "/home/cam/Documents/Christos/interpolation/git_to_publish/4D-neural-fields-optimise-3D-printing/4D-neural-fields-optimise-3D-printing/data_bolt.h5" # Directory where data is stored
   dim_reduction: 2 # Number of pixels in largest dim
 
 training:
-  epochs: 5 # Number of epochs for training
+  epochs: 5               # Number of epochs for training
   batch: 50000
-  learning_rate: 0.00001 # Learning rate for the optimizer
-  LAMBDA: 0.00001
-  gpus: 2 # Number of GPUs to use for training
+  learning_rate: 0.00001  # Learning rate for the optimizer
+  gdir: 0.1               # Set to =0 if GDIR needs to be disabled
+  gpus: 2                 # Number of GPUs to use for training
 
 model:
   inputs: 4 # [X, Y, Z, FR]

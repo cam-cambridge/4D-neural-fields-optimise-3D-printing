@@ -1,0 +1,19 @@
+config: !!python/object:argparse.Namespace
+  data: !!python/object:argparse.Namespace
+    dataroot: /home/cam/Documents/Christos/interpolation/git_to_publish/4D-neural-fields-optimise-3D-printing/4D-neural-fields-optimise-3D-printing/data_bolt.h5
+    dim_reduction: 2
+  model: !!python/object:argparse.Namespace
+    first_omega_0: 30.0
+    hidden: 1024
+    hidden_omega_0: 30.0
+    inputs: 4
+    n_hidden: 8
+    outermost_linear: true
+    outputs: 1
+  name: interpol
+  training: !!python/object:argparse.Namespace
+    batch: 50000
+    epochs: 5
+    gdir: 0.0
+    gpus: 2
+    learning_rate: 1.0e-05

@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from torch.autograd import grad
 import pytorch_lightning as pl
 from pyDOE import lhs
 
@@ -24,14 +25,14 @@ class Interpol(pl.LightningModule):
 
         self.max_epochs = self.config.training.epochs
         self.lr = self.config.training.learning_rate
-        self.gdir = self.config.gdir.gpus
+        self.gdir = self.config.training.gdir
         self.gpus = self.config.training.gpus
 
         self.net = []
         self.net.append(SineLayer(config.model.inputs, config.model.hidden, 
                                   is_first=True, omega_0= config.model.first_omega_0))
 
-        for i in range(config.model.n_hidden):
+        for _ in range(config.model.n_hidden):
             self.net.append(SineLayer(config.model.hidden, config.model.hidden, 
                                       is_first=False, omega_0=30.))
 
@@ -61,24 +62,54 @@ class Interpol(pl.LightningModule):
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.config.training.epochs)  # T_max is the number of epochs
         return {"optimizer": optimizer, "lr_scheduler": scheduler}
 
-    def loss_function(self, X, Y):
+    def loss_function(self, X: torch.Tensor, Y: torch.Tensor) -> torch.Tensor:
+        """
+        Compute the loss function, including reconstruction loss and optional regularization.
+
+        Parameters:
+        - X (torch.Tensor): Input tensor of shape [batch_size, input_dim].
+          First part contains spatial features, second part contains parameters.
+        - Y (torch.Tensor): Ground truth tensor of shape [batch_size, output_dim].
+
+        Returns:
+        - torch.Tensor: Total loss (reconstruction + regularization).
+        """
+        # Forward pass for reconstruction
+        spatial_features, params = X[:, :3], X[:, 3:]
+        Y_hat_recon = self.forward(spatial_features, params)
         
-        Y_hat_recon = self.forward(X[:,:3], X[:,3:])
+        # Compute reconstruction loss
         reconstruction_loss = F.mse_loss(Y, Y_hat_recon)
 
-        regularization_term=torch.tensor(0)
-        if self.gdir>0:
-            lhs_samples = torch.tensor(lhs(4, samples=10000)).float().to('cuda')
-            space=  lhs_samples[:,:-1]
-            params= lhs_samples[:,-1:].requires_grad_(True)
-            Y_hat_regularization = self.forward(space, params)
-            dS_dp = torch.autograd.grad(Y_hat_regularization, params, create_graph=True, grad_outputs=torch.ones_like(Y_hat_regularization))[0]
-            regularization_term = torch.norm(dS_dp) ** 2
-        total_loss = reconstruction_loss + self.LAMBDA * regularization_term
+        # Initialize regularization term
+        regularization_term = torch.tensor(0.0, device=X.device)
 
-        if self.training and self.global_rank == 0:
-                self.logging_device.log("reconstruction", reconstruction_loss.item())
-                self.logging_device.log("regularization", self.LAMBDA * regularization_term.item())
+        if self.gdir > 0:
+            # Generate Latin Hypercube Samples
+            lhs_samples = torch.tensor(lhs(4, samples=10000), dtype=torch.float, device=X.device)
+            space, params = lhs_samples[:, :-1], lhs_samples[:, -1:].requires_grad_(True)
+
+            # Forward pass for regularization term
+            Y_hat_regularization = self.forward(space, params)
+
+            # Compute gradient of Y_hat w.r.t. parameters
+            dS_dp = grad(
+                outputs=Y_hat_regularization,
+                inputs=params,
+                grad_outputs=torch.ones_like(Y_hat_regularization),
+                create_graph=True
+            )[0]
+
+            # Compute the regularization term (squared gradient norm)
+            regularization_term = torch.norm(dS_dp, p=2) ** 2
+
+        # Compute total loss
+        total_loss = reconstruction_loss + self.gdir * regularization_term
+
+        # Logging (only on rank 0 if distributed training is enabled)
+        if self.training and getattr(self, 'global_rank', 0) == 0:
+            self.logging_device.log("reconstruction_loss", reconstruction_loss.item())
+            self.logging_device.log("regularization_term", (self.gdir * regularization_term).item())
 
         self.log(
             "loss",
@@ -105,7 +136,7 @@ class Interpol(pl.LightningModule):
 
         if self.global_rank==0 and batch_idx%1==0 and batch_idx!=0:
             self.logging_device.report_running_mean(plot=False)
-            
+
         return loss
 
     def on_train_epoch_end(self, unused=None):

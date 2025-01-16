@@ -1,6 +1,6 @@
 # 4D Neural Fields Optimise 3D Printing
 
-Official PyTorch codebase for GDIR (the Gradient-Driven Interpolation Regularization) presented in Regularized Interpolation in 4D Neural Fields Enables Optimization of 3D Printed Geometries
+Official PyTorch codebase for GDIR (the Gradient-Driven Interpolation Regularization) presented in Regularized Interpolation in 4D Neural Fields Enables Optimization of 3D Printed Geometries. 
 [\[arXiv\]]()
 
 ## Method

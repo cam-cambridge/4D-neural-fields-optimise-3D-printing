@@ -163,3 +163,5 @@ cython_debug/
 
 
 *.h5
+
+*/logs/
