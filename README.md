@@ -10,17 +10,22 @@ Official PyTorch codebase for GDIR (the Gradient-Driven Interpolation Regulariza
 ## Code Structure
 
 ```
-.                             # the package
+.
 ├── src                       
 │   ├── interpol.py           #   the model
+│   ├── sine  .py             #   official implementation of SIREN layer
 │   ├── utils.py              #   shared utilities
-│   └── datasets              #   datasets, data loaders, ...
+│   └── dataset               #   datasets, data loaders, ...
 ├── config.yaml               # the configuration file
 └── main.py                   # entrypoint to launch GDIR pretraining locally on your machine
 
 ```
 
 ### Requirements
+* Python 3.8 (or newer)
+* PyTorch 2.5
+* Other dependencies: pyDOE, numpy, opencv
+see requirements.txt
 
 ## Citation
 If you find this repository useful in your research, please consider giving a star :star: and a citation
