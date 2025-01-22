@@ -5,6 +5,9 @@ Official PyTorch codebase for GDIR (the Gradient-Driven Interpolation Regulariza
 
 ## Method
 
+Gradient-driven interpolation regularization enables smooth interpolation between observed instances encoded within the same neural field. Notably, this approach introduces inductive biases in regions with sparse supervision by leveraging the network’s own gradients. Specifically, it minimizes the norm of the Jacobian of the output with respect to one of the input dimensions, promoting smoother transitions in underrepresented regions of the input space.
+The resulting regularized field can be effectively utilized for various downstream tasks, including video super-resolution and shape interpolation. Additionally, it finds practical applications in industrial settings, such as optimizing geometry as a function of manufacturing process parameters, enhancing the utility and flexibility of this technique.
+
 ## Visualizations
 
 ## Code Structure
