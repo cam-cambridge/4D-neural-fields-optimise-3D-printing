@@ -6,9 +6,13 @@ Official PyTorch codebase for GDIR (the Gradient-Driven Interpolation Regulariza
 ## Method
 
 Gradient-driven interpolation regularization enables smooth interpolation between observed instances encoded within the same neural field. Notably, this approach introduces inductive biases in regions with sparse supervision by leveraging the network’s own gradients. Specifically, it minimizes the norm of the Jacobian of the output with respect to one of the input dimensions, promoting smoother transitions in underrepresented regions of the input space.
+
 The resulting regularized field can be effectively utilized for various downstream tasks, including video super-resolution and shape interpolation. Additionally, it finds practical applications in industrial settings, such as optimizing geometry as a function of manufacturing process parameters, enhancing the utility and flexibility of this technique.
 
 ## Visualizations
+
+As opposed to traditional approaches where the field is not regularised, our apporach achieves smooth intperpolation between seen geometries.
+![Smooth Interpolation](teasers/animated.gif)
 
 ## Code Structure
 
@@ -19,8 +23,9 @@ The resulting regularized field can be effectively utilized for various downstre
 │   ├── sine  .py             #   official implementation of SIREN layer
 │   ├── utils.py              #   shared utilities
 │   └── dataset               #   datasets, data loaders, ...
-├── config.yaml               # the configuration file
-└── main.py                   # entrypoint to launch GDIR pretraining locally on your machine
+├── config.yaml               #   the configuration file < activate/deactivate GDIR here >
+├── requirements.txt          
+└── main.py                   #   entrypoint to launch training locally on your machine
 
 ```
 
@@ -28,6 +33,7 @@ The resulting regularized field can be effectively utilized for various downstre
 * Python 3.8 (or newer)
 * PyTorch 2.5
 * Other dependencies: pyDOE, numpy, opencv
+
 see requirements.txt
 
 ## Citation
