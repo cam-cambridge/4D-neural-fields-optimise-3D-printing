@@ -12,6 +12,7 @@ The resulting regularized field can be effectively utilized for various downstre
 ## Visualizations
 
 As opposed to traditional approaches where the field is not regularised, our apporach achieves smooth intperpolation between seen geometries.
+
 ![Smooth Interpolation](teasers/animated.gif)
 
 ## Code Structure
