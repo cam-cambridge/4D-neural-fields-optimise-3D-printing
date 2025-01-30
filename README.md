@@ -11,7 +11,7 @@ The resulting regularized field can be effectively utilized for various downstre
 
 ## Visualizations
 
-As opposed to traditional approaches where the field is not regularised, our apporach achieves smooth intperpolation between seen geometries.
+As opposed to traditional approaches wherein the field is not regularised, our apporach achieves stable intperpolation between seen geometries even when supervision is extremely sparse.
 
 ![Smooth Interpolation](teasers/animated.gif)
 
