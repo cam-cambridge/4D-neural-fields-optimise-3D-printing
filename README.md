@@ -40,9 +40,12 @@ see requirements.txt
 ## Citation
 If you find this repository useful in your research, please consider giving a star :star: and a citation
 ```
-@article{margadji4D,
-  title={Regularized Interpolation in 4D Neural Fields Enables Optimization of 3D Printed Geometries},
-  author={Margadji, Christos and Kuswoyo, Andi and Pattinson, Sebastian},
-  journal={arXiv preprint arXiv:},
-  year={2025}
+@misc{margadji2025regularizedinterpolation4dneural,
+      title={Regularized interpolation in 4D neural fields enables optimization of 3D printed geometries}, 
+      author={Christos Margadji and Andi Kuswoyo and Sebastian W. Pattinson},
+      year={2025},
+      eprint={2502.01517},
+      archivePrefix={arXiv},
+      primaryClass={cs.GR},
+      url={https://arxiv.org/abs/2502.01517}, 
 }
